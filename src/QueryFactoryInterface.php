@@ -9,6 +9,48 @@ interface QueryFactoryInterface
 {
 
     /**
+     * Returns a new QueryFactory using default settings.
+     *
+     * @param string $url
+     *   The URL of the Piwik server.
+     *
+     * @return \Piwik\ReportingApi\QueryFactoryInterface
+     *   The new QueryFactory object.
+     */
+    public static function create($url);
+
+    /**
+     * Sets the URL of the Piwik server.
+     *
+     * @param string $url
+     *   The URL of the Piwik server.
+     */
+    public function setUrl($url);
+
+    /**
+     * Sets a default parameter.
+     *
+     * @param string $name
+     *   The name of the parameter to set.
+     * @param mixed $value
+     *   The value to set
+     */
+    public function set($name, $value);
+
+    /**
+     * Returns whether or not the default parameter with the given name is set.
+     *
+     * @return bool
+     *   TRUE if the parameter has been set, FALSE otherwise.
+     */
+    public function has($name);
+
+    /**
+     * Unsets the default parameter with the given name.
+     */
+    public function unset($name);
+
+    /**
      * Returns a query object for the given Piwik API method.
      *
      * @param string $method

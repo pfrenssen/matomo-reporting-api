@@ -39,13 +39,7 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Returns a new QueryFactory using default settings.
-     *
-     * @param string $url
-     *   The URL of the Piwik server.
-     *
-     * @return \Piwik\ReportingApi\QueryFactoryInterface
-     *   The new QueryFactory object.
+     * {@inheritdoc}
      */
     public static function create($url)
     {
@@ -53,10 +47,7 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Sets the URL of the Piwik server.
-     *
-     * @param string $url
-     *   The URL of the Piwik server.
+     * {@inheritdoc}
      */
     public function setUrl($url)
     {
@@ -64,12 +55,7 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Sets a default parameter.
-     *
-     * @param string $name
-     *   The name of the parameter to set.
-     * @param mixed $value
-     *   The value to set
+     * {@inheritdoc}
      */
     public function set($name, $value)
     {
@@ -77,10 +63,7 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Returns whether or not the default parameter with the given name is set.
-     *
-     * @return bool
-     *   TRUE if the parameter has been set, FALSE otherwise.
+     * {@inheritdoc}
      */
     public function has($name)
     {
@@ -88,7 +71,7 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * Unsets the default parameter with the given name.
+     * {@inheritdoc}
      */
     public function unset($name)
     {
