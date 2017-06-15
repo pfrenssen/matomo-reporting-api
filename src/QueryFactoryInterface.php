@@ -24,6 +24,9 @@ interface QueryFactoryInterface
      *
      * @param string $url
      *   The URL of the Piwik server.
+     *
+     * @return $this
+     *   The updated query factory object.
      */
     public function setUrl($url);
 
@@ -34,6 +37,9 @@ interface QueryFactoryInterface
      *   The name of the parameter to set.
      * @param mixed $value
      *   The value to set
+     *
+     * @return $this
+     *   The updated query factory object.
      */
     public function set($name, $value);
 
@@ -47,6 +53,12 @@ interface QueryFactoryInterface
 
     /**
      * Unsets the default parameter with the given name.
+     *
+     * @param string $name
+     *   The name of the parameter to unset.
+     *
+     * @return $this
+     *   The updated query factory object.
      */
     public function unset($name);
 
