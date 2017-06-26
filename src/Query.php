@@ -88,7 +88,7 @@ class Query implements QueryInterface
     public function execute()
     {
         $this->prepareExecute();
-        $result = $this->httpClient->get($this->url, ['query' => $this->parameters]);
-        return json_decode($result->getBody());
+        $response = $this->httpClient->get($this->url, ['query' => $this->parameters]);
+        return new QueryResult($response);
     }
 }

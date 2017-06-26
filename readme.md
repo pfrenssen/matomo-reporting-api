@@ -32,17 +32,19 @@ $query_factory
 
 // Example: retrieve the version of the Piwik server.
 $query = $query_factory->getQuery('API.getPiwikVersion');
-$piwik_version = $query->execute()->value;
+$response = $query->execute()->getResponse();
+$piwik_version = $response->value;
 
 echo "Server is running Piwik $piwik_version.\n\n";
 
 // Example: retrieve browser usage statistics for the past week.
-$result = $query_factory->getQuery('DevicesDetection.getBrowsers')
+$response = $query_factory->getQuery('DevicesDetection.getBrowsers')
   ->setParameter('date', 'today')
   ->setParameter('period', 'week')
-  ->execute();
+  ->execute()
+  ->getResponse();
 
-foreach ($result as $browser) {
+foreach ($response as $browser) {
   echo "Browser: {$browser->label}\n";
   echo "Total visits: {$browser->nb_visits}\n";
   echo "Bounce count: {$browser->bounce_count}\n";

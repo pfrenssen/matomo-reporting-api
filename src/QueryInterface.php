@@ -35,8 +35,8 @@ interface QueryInterface
     /**
      * Executes the query.
      *
-     * @return object
-     *   The raw data returned by the Piwik reporting API as a simple object.
+     * @return \Piwik\ReportingApi\QueryResult
+     *   The query result.
      */
     public function execute();
 }
