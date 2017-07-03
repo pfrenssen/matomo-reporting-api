@@ -71,6 +71,25 @@ class Query implements QueryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameter($name)
+    {
+        if (!array_key_exists($name, $this->parameters)) {
+            throw new \InvalidArgumentException("Parameter '$name' is not set.");
+        }
+        return $this->parameters[$name];
+    }
+
+    /**
      * Prepares the query for execution.
      */
     protected function prepareExecute()

@@ -33,6 +33,28 @@ interface QueryInterface
     public function setParameter($name, $value);
 
     /**
+     * Returns the query parameters that have been set.
+     *
+     * @return array
+     *   An associative array of query parameters, keyed by parameter name.
+     */
+    public function getParameters();
+
+    /**
+     * Returns the query parameters with the given name.
+     *
+     * @param string $name
+     *   The name of the parameter.
+     *
+     * @return mixed
+     *   The value of the parameter.
+     *
+     * @throws \InvalidArgumentException
+     *   Thrown when the query parameter with the given name is not set.
+     */
+    public function getParameter($name);
+
+    /**
      * Executes the query.
      *
      * @return \Piwik\ReportingApi\QueryResult
