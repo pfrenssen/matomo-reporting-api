@@ -71,6 +71,9 @@ class QueryResult
      */
     public function hasError()
     {
+        if ($this->getRawResponse()->getStatusCode() != 200) {
+            return TRUE;
+        }
         // If an error occurs the Piwik server still returns a 200 OK response,
         // but the body of the response will contain the string "error" in the
         // "result" parameter.
