@@ -77,7 +77,7 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function unset($name)
+    public function remove($name)
     {
         unset($this->defaultParameters[$name]);
 

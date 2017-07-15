@@ -52,7 +52,7 @@ interface QueryFactoryInterface
     public function has($name);
 
     /**
-     * Unsets the default parameter with the given name.
+     * Removes the default parameter with the given name.
      *
      * @param string $name
      *   The name of the parameter to unset.
@@ -60,7 +60,7 @@ interface QueryFactoryInterface
      * @return $this
      *   The updated query factory object.
      */
-    public function unset($name);
+    public function remove($name);
 
     /**
      * Returns a query object for the given Piwik API method.
