@@ -57,8 +57,28 @@ interface QueryInterface
     /**
      * Executes the query.
      *
+     * @param string $method
+     *   The request method. Either 'GET' or 'POST'.
+     *
      * @return \Piwik\ReportingApi\QueryResult
      *   The query result.
      */
-    public function execute();
+    public function execute($method = 'GET');
+
+    /**
+     * Executes a get query.
+     *
+     * @return \Piwik\ReportingApi\QueryResult
+     *   The query result.
+     */
+    public function get();
+
+    /**
+     * Executes a post query.
+     *
+     * @return \Piwik\ReportingApi\QueryResult
+     *   The query result.
+     */
+    public function post();
+
 }

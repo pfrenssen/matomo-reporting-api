@@ -104,10 +104,31 @@ class Query implements QueryInterface
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute($method = 'GET')
     {
+        $method = strtoupper($method);
+        if (!in_array($method, ['GET', 'POST'])) {
+          throw new \InvalidArgumentException("Only 'GET' and 'POST' requests are allowed.");
+        }
+
         $this->prepareExecute();
-        $response = $this->httpClient->get($this->url, ['query' => $this->parameters]);
+        $response = $method === 'GET' ?
+          $this->httpClient->get($this->url, ['query' => $this->parameters]) :
+          $this->httpClient->post($this->url, ['form_params' => $this->parameters]);
         return new QueryResult($response);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get() {
+      return $this->execute('GET');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function post() {
+      return $this->execute('POST');
     }
 }
