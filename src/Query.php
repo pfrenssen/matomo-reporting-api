@@ -11,9 +11,9 @@ class Query implements QueryInterface
 {
 
     /**
-     * The Guzzle HTTP client.
+     * An http client that encapsulates a GuzzleHttp client.
      *
-     * @var \GuzzleHttp\Client
+     * @var \Piwik\ReportingApi\HttpClient
      */
     protected $httpClient;
 
@@ -23,13 +23,6 @@ class Query implements QueryInterface
      * @var array
      */
     protected $parameters;
-
-    /**
-     * The URL of the Piwik server.
-     *
-     * @var string
-     */
-    protected $url;
 
     /**
      * Constructs a new Query object.
@@ -44,8 +37,8 @@ class Query implements QueryInterface
         if (filter_var($url, FILTER_VALIDATE_URL) === false) {
             throw new \InvalidArgumentException('Invalid URL.');
         }
-        $this->url = $url;
-        $this->httpClient = $httpClient;
+        $this->httpClient = new HttpClient($httpClient);
+        $this->httpClient->setUrl($url);
     }
 
     /**
@@ -57,8 +50,7 @@ class Query implements QueryInterface
             $this->setParameter($name, $value);
         }
 
-        return $this;
-    }
+        return $this;    }
 
     /**
      * {@inheritdoc}
@@ -90,6 +82,16 @@ class Query implements QueryInterface
     }
 
     /**
+     * Returns the http client.
+     *
+     * @return \Piwik\ReportingApi\HttpClient
+     *   The http client.
+     */
+    public function getHttpClient() {
+        return $this->httpClient;
+    }
+
+    /**
      * Prepares the query for execution.
      */
     protected function prepareExecute()
@@ -107,7 +109,7 @@ class Query implements QueryInterface
     public function execute()
     {
         $this->prepareExecute();
-        $response = $this->httpClient->get($this->url, ['query' => $this->parameters]);
+        $response = $this->httpClient->setRequestParams($this->parameters)->execute();
         return new QueryResult($response);
     }
 }
