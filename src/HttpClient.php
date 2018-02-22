@@ -93,7 +93,7 @@ class HttpClient implements HttpClientInterfcae
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getUrl()
     {
@@ -101,23 +101,21 @@ class HttpClient implements HttpClientInterfcae
     }
 
     /**
-     * Sets the url of the request.
-     *
-     * @param string $url
-     *   The url of the request.
-     *
-     * @return \Piwik\ReportingApi\HttpClient
-     *   The object itself for chain calls.
+     * {@inheritdoc}
      */
     public function setUrl($url)
     {
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            throw new \InvalidArgumentException('Invalid URL.');
+        }
+
         $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Executes the request and returns the results.
+     * {@inheritdoc}
      */
     public function execute()
     {
