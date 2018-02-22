@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Request;
 /**
  * A wrapper class that provides request options for the http client.
  */
-class HttpClient
+class HttpClient implements HttpClientInterfcae
 {
 
     /**
@@ -23,7 +23,7 @@ class HttpClient
      *
      * @var array
      */
-    protected $requestParams;
+    protected $requestParams = array();
 
     /**
      * The request method.
@@ -51,13 +51,7 @@ class HttpClient
     }
 
     /**
-     * Sets the request parameters.
-     *
-     * @param array $requestParams
-     *   The request parameters array.
-     *
-     * @return \Piwik\ReportingApi\HttpClient
-     *   The object itself for chain calls.
+     * {@inheritdoc}
      */
     public function setRequestParams(array $requestParams)
     {
@@ -67,10 +61,7 @@ class HttpClient
     }
 
     /**
-     * Returns the request parameters.
-     *
-     * @return array
-     *   The request parameters.
+     * {@inheritdoc}
      */
     public function getRequestParams()
     {
@@ -78,10 +69,7 @@ class HttpClient
     }
 
     /**
-     * Returns the request method.
-     *
-     * @return string
-     *   The request method.
+     * {@inheritdoc}
      */
     public function getMethod()
     {
@@ -89,13 +77,7 @@ class HttpClient
     }
 
     /**
-     * Sets the request method.
-     *
-     * @param string $method
-     *   The request method.
-     *
-     * @return \Piwik\ReportingApi\HttpClient
-     *   The object itself for chain calls.
+     * {@inheritdoc}
      */
     public function setMethod($method)
     {
@@ -139,6 +121,9 @@ class HttpClient
      */
     public function execute()
     {
+        if (empty($this->getUrl())) {
+            throw new \Exception('Request url is not set.');
+        }
         $request = new Request($this->getMethod(), $this->getUrl());
         $param_type = $this->method === 'GET' ? 'query' : 'form_params';
 
