@@ -34,9 +34,6 @@ class Query implements QueryInterface
      */
     public function __construct($url, Client $httpClient)
     {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new \InvalidArgumentException('Invalid URL.');
-        }
         $this->httpClient = new HttpClient($httpClient);
         $this->httpClient->setUrl($url);
     }

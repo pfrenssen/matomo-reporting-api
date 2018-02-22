@@ -61,6 +61,9 @@ interface HttpClientInterfcae
      *
      * @return \Piwik\ReportingApi\HttpClient
      *   The object itself for chain calls.
+     *
+     * @throws \InvalidArgumentException
+     *   Thrown when the url passed is not a valid url.
      */
     public function setUrl($url);
 
