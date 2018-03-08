@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Request;
 /**
  * A wrapper class that provides request options for the http client.
  */
-class HttpClient implements HttpClientInterfcae
+class HttpClient implements HttpClientInterface
 {
 
     /**
