@@ -47,7 +47,8 @@ class Query implements QueryInterface
             $this->setParameter($name, $value);
         }
 
-        return $this;    }
+        return $this;
+    }
 
     /**
      * {@inheritdoc}
