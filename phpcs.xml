@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="Piwik Reporting API coding standard" namespace="PiwikReportingApi\CS\Standard">
+  <file>./src</file>
+  <rule ref="PSR2" />
+</ruleset>
