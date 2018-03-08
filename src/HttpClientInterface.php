@@ -2,7 +2,7 @@
 
 namespace Piwik\ReportingApi;
 
-interface HttpClientInterfcae
+interface HttpClientInterface
 {
     /**
      * Sets the request parameters.
