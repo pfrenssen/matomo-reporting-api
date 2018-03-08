@@ -84,7 +84,7 @@ class HttpClient implements HttpClientInterface
         // Currently, only GET and POST requests are supported.
         if (!in_array($method, array('GET', 'POST'))) {
             throw new \InvalidArgumentException(
-              'Only GET and POST requests are allowed.'
+                'Only GET and POST requests are allowed.'
             );
         }
         $this->method = $method;
@@ -126,8 +126,8 @@ class HttpClient implements HttpClientInterface
         $param_type = $this->method === 'GET' ? 'query' : 'form_params';
 
         return $this->httpClient->send(
-          $request,
-          array($param_type => $this->getRequestParams())
+            $request,
+            array($param_type => $this->getRequestParams())
         );
     }
 }

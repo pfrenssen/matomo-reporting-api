@@ -2,6 +2,9 @@
 
 namespace Piwik\ReportingApi;
 
+/**
+ * Interface for objects that wrap an HTTP client.
+ */
 interface HttpClientInterface
 {
     /**

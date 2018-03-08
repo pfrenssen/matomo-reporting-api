@@ -85,7 +85,8 @@ class Query implements QueryInterface
      * @return \Piwik\ReportingApi\HttpClient
      *   The http client.
      */
-    public function getHttpClient() {
+    public function getHttpClient()
+    {
         return $this->httpClient;
     }
 

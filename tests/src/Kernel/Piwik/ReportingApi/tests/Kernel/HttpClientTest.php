@@ -73,5 +73,4 @@ class HttpClientTest extends TestCase
 
         $this->assertTrue($return instanceof Response);
     }
-
 }
