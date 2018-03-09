@@ -2,8 +2,6 @@
 
 namespace Piwik\ReportingApi;
 
-use GuzzleHttp\Client;
-
 /**
  * Default implementation of a query for the Piwik reporting API.
  */
@@ -29,12 +27,12 @@ class Query implements QueryInterface
      *
      * @param string $url
      *   The URL of the Piwik server.
-     * @param \GuzzleHttp\Client $httpClient
-     *   The Guzzle HTTP client.
+     * @param \Piwik\ReportingApi\HttpClient $httpClient
+     *   The HTTP client wrapper.
      */
-    public function __construct($url, Client $httpClient)
+    public function __construct($url, HttpClient $httpClient)
     {
-        $this->httpClient = new HttpClient($httpClient);
+        $this->httpClient = $httpClient;
         $this->httpClient->setUrl($url);
     }
 
@@ -77,17 +75,6 @@ class Query implements QueryInterface
             throw new \InvalidArgumentException("Parameter '$name' is not set.");
         }
         return $this->parameters[$name];
-    }
-
-    /**
-     * Returns the http client.
-     *
-     * @return \Piwik\ReportingApi\HttpClient
-     *   The http client.
-     */
-    public function getHttpClient()
-    {
-        return $this->httpClient;
     }
 
     /**

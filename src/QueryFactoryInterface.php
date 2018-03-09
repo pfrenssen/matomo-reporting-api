@@ -73,4 +73,12 @@ interface QueryFactoryInterface
      *   The query object.
      */
     public function getQuery($method);
+
+    /**
+     * Returns the HTTP client wrapper.
+     *
+     * @return \Piwik\ReportingApi\HttpClient
+     *   The HTTP client wrapper.
+     */
+    public function getHttpClient();
 }
