@@ -23,7 +23,7 @@ class HttpClient implements HttpClientInterface
      *
      * @var array
      */
-    protected $requestParams = array();
+    protected $requestParams = [];
 
     /**
      * The request method.
@@ -82,7 +82,7 @@ class HttpClient implements HttpClientInterface
     public function setMethod($method)
     {
         // Currently, only GET and POST requests are supported.
-        if (!in_array($method, array('GET', 'POST'))) {
+        if (!in_array($method, ['GET', 'POST'])) {
             throw new \InvalidArgumentException(
                 'Only GET and POST requests are allowed.'
             );
@@ -127,7 +127,7 @@ class HttpClient implements HttpClientInterface
 
         return $this->httpClient->send(
             $request,
-            array($param_type => $this->getRequestParams())
+            [$param_type => $this->getRequestParams()]
         );
     }
 }

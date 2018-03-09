@@ -26,7 +26,7 @@ class HttpClientTest extends TestCase
     {
         // This sets up the mock client to respond to the first request it gets
         // with an HTTP 200 containing your mock json body.
-        $mock = new MockHandler(array(new Response(200, [], 'NA')));
+        $mock = new MockHandler([new Response(200, [], 'NA')]);
         $handler = HandlerStack::create($mock);
         $mockHttp = new Client(['handler' => $handler]);
         $this->httpCient = new HttpClient($mockHttp);
@@ -38,7 +38,7 @@ class HttpClientTest extends TestCase
     public function testArguments()
     {
         $test_url = 'http://example.com';
-        $params = array('foo' => 'bar');
+        $params = ['foo' => 'bar'];
         $this->httpCient->setUrl($test_url);
         $this->assertEquals($test_url, $this->httpCient->getUrl());
 
@@ -61,13 +61,13 @@ class HttpClientTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->httpCient
-          ->setRequestParams(array('foo' => 'bar'))
+          ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
           ->execute();
 
         $return = $this->httpCient
           ->setUrl('http://example.com')
-          ->setRequestParams(array('foo' => 'bar'))
+          ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
           ->execute();
 
