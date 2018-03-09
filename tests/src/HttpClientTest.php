@@ -1,6 +1,6 @@
 <?php
 
-namespace Piwik\ReportingApi\tests\Kernel;
+namespace Piwik\ReportingApi\tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
