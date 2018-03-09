@@ -42,9 +42,6 @@ class HttpClientTest extends TestCase
         $this->httpClient->setUrl($test_url);
         $this->assertEquals($test_url, $this->httpClient->getUrl());
 
-        $this->expectException(\InvalidArgumentException::class);
-        $this->httpClient->setMethod('PUT');
-
         $this->httpClient->setMethod('GET');
         $this->assertEquals('GET', $this->httpClient->getMethod());
         $this->httpClient->setMethod('POST');
@@ -52,6 +49,81 @@ class HttpClientTest extends TestCase
 
         $this->httpClient->setRequestParams($params);
         $this->assertEquals($params, $this->httpClient->getRequestParams());
+    }
+
+    /**
+     * @param string $method
+     *   A supported HTTP method.
+     *
+     * @covers ::getMethod
+     * @dataProvider supportedHttpMethodsProvider
+     */
+    public function testGetMethod($method)
+    {
+        // The GET method should be set by default.
+        $this->assertEquals('GET', $this->httpClient->getMethod());
+
+        // Check that the method that was set is returned correctly.
+        $this->httpClient->setMethod($method);
+        $this->assertEquals($method, $this->httpClient->getMethod());
+    }
+
+    /**
+     * Tests that an exception is thrown for unsupported HTTP methods.
+     *
+     * @param string $invalid_method
+     *   An unsupported or invalid HTTP method.
+     *
+     * @covers ::setMethod
+     * @expectedException \InvalidArgumentException
+     * @dataProvider unsupportedHttpMethodsProvider
+     */
+    public function testUnsupportedHttpMethods($invalid_method)
+    {
+        $this->httpClient->setMethod($invalid_method);
+    }
+
+    /**
+     * Data provider returning supported HTTP methods.
+     */
+    public function supportedHttpMethodsProvider()
+    {
+        return [
+            ['GET'],
+            ['POST'],
+        ];
+    }
+
+    /**
+     * Data provider returning unsupported and invalid HTTP methods.
+     */
+    public function unsupportedHttpMethodsProvider()
+    {
+        return [
+            // Unsupported HTTP methods.
+            ['CONNECT'],
+            ['DELETE'],
+            ['HEAD'],
+            ['OPTIONS'],
+            ['PUT'],
+            ['TRACE'],
+            // Lowercase HTTP methods are invalid.
+            ['connect'],
+            ['delete'],
+            ['get'],
+            ['head'],
+            ['options'],
+            ['post'],
+            ['put'],
+            ['trace'],
+            // Some arguments that are no HTTP methods.
+            [null],
+            [''],
+            [0],
+            [1],
+            [-1],
+            ['0'],
+        ];
     }
 
     /**
