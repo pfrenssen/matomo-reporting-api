@@ -82,7 +82,7 @@ class HttpClient implements HttpClientInterface
     public function setMethod($method)
     {
         // Currently, only GET and POST requests are supported.
-        if (!in_array($method, ['GET', 'POST'])) {
+        if (!in_array($method, ['GET', 'POST'], true)) {
             throw new \InvalidArgumentException(
                 'Only GET and POST requests are allowed.'
             );
