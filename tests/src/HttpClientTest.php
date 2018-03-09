@@ -17,7 +17,7 @@ class HttpClientTest extends TestCase
      *
      * @var \Piwik\ReportingApi\HttpClient
      */
-    protected $httpCient;
+    protected $httpClient;
 
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class HttpClientTest extends TestCase
         $mock = new MockHandler([new Response(200, [], 'NA')]);
         $handler = HandlerStack::create($mock);
         $mockHttp = new Client(['handler' => $handler]);
-        $this->httpCient = new HttpClient($mockHttp);
+        $this->httpClient = new HttpClient($mockHttp);
     }
 
     /**
@@ -39,19 +39,19 @@ class HttpClientTest extends TestCase
     {
         $test_url = 'http://example.com';
         $params = ['foo' => 'bar'];
-        $this->httpCient->setUrl($test_url);
-        $this->assertEquals($test_url, $this->httpCient->getUrl());
+        $this->httpClient->setUrl($test_url);
+        $this->assertEquals($test_url, $this->httpClient->getUrl());
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->httpCient->setMethod('PUT');
+        $this->httpClient->setMethod('PUT');
 
-        $this->httpCient->setMethod('GET');
-        $this->assertEquals('GET', $this->httpCient->getMethod());
-        $this->httpCient->setMethod('POST');
-        $this->assertEquals('POST', $this->httpCient->getMethod());
+        $this->httpClient->setMethod('GET');
+        $this->assertEquals('GET', $this->httpClient->getMethod());
+        $this->httpClient->setMethod('POST');
+        $this->assertEquals('POST', $this->httpClient->getMethod());
 
-        $this->httpCient->setRequestParams($params);
-        $this->assertEquals($params, $this->httpCient->getRequestParams());
+        $this->httpClient->setRequestParams($params);
+        $this->assertEquals($params, $this->httpClient->getRequestParams());
     }
 
     /**
@@ -60,12 +60,12 @@ class HttpClientTest extends TestCase
     public function testExecute()
     {
         $this->expectException(\Exception::class);
-        $this->httpCient
+        $this->httpClient
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
           ->execute();
 
-        $return = $this->httpCient
+        $return = $this->httpClient
           ->setUrl('http://example.com')
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
