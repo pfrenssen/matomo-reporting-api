@@ -71,7 +71,7 @@ interface HttpClientInterface
     public function setUrl($url);
 
     /**
-     * Executes the request and returns the results.
+     * Sends the request and returns the results.
      *
      * @return \GuzzleHttp\Psr7\Response
      *   A response that the request generated.
@@ -79,5 +79,5 @@ interface HttpClientInterface
      * @throws \Exception
      *   Thrown when the url is not set yet.
      */
-    public function execute();
+    public function sendRequest();
 }

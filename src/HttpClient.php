@@ -126,7 +126,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function sendRequest()
     {
         if (empty($this->getUrl())) {
             throw new \Exception('Request url is not set.');

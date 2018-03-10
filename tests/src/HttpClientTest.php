@@ -183,7 +183,7 @@ class HttpClientTest extends TestCase
         $http_client->setUrl('http://example.com');
         $result = $http_client->setMethod($method);
         // Send the request so that we can check if the correct HTTP method is used.
-        $http_client->execute();
+        $http_client->sendRequest();
 
         // Check that the client is returned for chaining.
         $this->assertEquals($http_client, $result);
@@ -260,13 +260,13 @@ class HttpClientTest extends TestCase
         $http_client
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
-          ->execute();
+          ->sendRequest();
 
         $return = $http_client
           ->setUrl('http://example.com')
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
-          ->execute();
+          ->sendRequest();
 
         $this->assertTrue($return instanceof Response);
     }
