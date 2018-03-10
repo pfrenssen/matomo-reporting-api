@@ -2,10 +2,7 @@
 
 namespace Piwik\ReportingApi\tests;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Piwik\ReportingApi\HttpClient;
@@ -22,34 +19,53 @@ class HttpClientTest extends TestCase
 {
 
     /**
-     * The query factory object.
+     * @param array $parameters
      *
-     * @var \Piwik\ReportingApi\HttpClient
+     * @covers ::getRequestParams
+     * @dataProvider requestParametersProvider
      */
-    protected $httpClient;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp()
+    public function testGetRequestParameters(array $parameters)
     {
-        // This sets up the mock client to respond to the first request it gets
-        // with an HTTP 200 containing your mock json body.
-        $mock = new MockHandler([new Response(200, [], 'NA')]);
-        $handler = HandlerStack::create($mock);
-        $mockHttp = new Client(['handler' => $handler]);
-        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
-        $this->httpClient = new HttpClient($mockHttp, $requestFactory->reveal());
+        $http_client = $this->getHttpClient();
+
+        // By default the parameters are empty.
+        $this->assertEmpty($http_client->getRequestParameters());
+
+        // Check that any parameters that are set are correctly returned.
+        $http_client->setRequestParameters($parameters);
+        $this->assertEquals($parameters, $http_client->getRequestParameters());
     }
 
     /**
-     * Tests the getters and setters of the class.
+     * @param array $parameters
+     *
+     * @covers ::setRequestParams
+     * @dataProvider requestParametersProvider
      */
-    public function testArguments()
+    public function testSetRequestParameters(array $parameters)
     {
-        $params = ['foo' => 'bar'];
-        $this->httpClient->setRequestParams($params);
-        $this->assertEquals($params, $this->httpClient->getRequestParams());
+        $http_client = $this->getHttpClient();
+
+        // Check that the object itself is returned for chaining.
+        $result = $http_client->setRequestParameters($parameters);
+        $this->assertEquals($http_client, $result);
+
+        // Check that the parameters have been correctly set.
+        $this->assertEquals($parameters, $http_client->getRequestParameters());
+    }
+
+    /**
+     * Data provider returning request parameters.
+     */
+    public function requestParametersProvider()
+    {
+        return [
+            [[]],
+            [['foo']],
+            [['foo' => 'bar']],
+            [['foo', 'bar']],
+            [['foo' => 'bar', 'baz' => 'qux']],
+        ];
     }
 
     /**
@@ -258,13 +274,13 @@ class HttpClientTest extends TestCase
         $http_client = $this->getHttpClient();
         $this->expectException(\Exception::class);
         $http_client
-          ->setRequestParams(['foo' => 'bar'])
+          ->setRequestParameters(['foo' => 'bar'])
           ->setMethod('GET')
           ->sendRequest();
 
         $return = $http_client
           ->setUrl('http://example.com')
-          ->setRequestParams(['foo' => 'bar'])
+          ->setRequestParameters(['foo' => 'bar'])
           ->setMethod('GET')
           ->sendRequest();
 

@@ -2,6 +2,8 @@
 <ruleset name="Piwik Reporting API coding standard" namespace="PiwikReportingApi\CS\Standard">
   <file>./src</file>
   <file>./tests</file>
-  <rule ref="PSR2" />
+  <rule ref="PSR2">
+    <exclude name="Generic.Files.LineLength.TooLong" />
+  </rule>
   <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
 </ruleset>

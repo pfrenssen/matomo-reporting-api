@@ -95,7 +95,7 @@ class Query implements QueryInterface
     public function execute()
     {
         $this->prepareExecute();
-        $response = $this->httpClient->setRequestParams($this->parameters)->sendRequest();
+        $response = $this->httpClient->setRequestParameters($this->parameters)->sendRequest();
         return new QueryResult($response);
     }
 }

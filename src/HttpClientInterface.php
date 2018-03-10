@@ -16,7 +16,7 @@ interface HttpClientInterface
      * @return \Piwik\ReportingApi\HttpClient
      *   The object itself for chain calls.
      */
-    public function setRequestParams(array $requestParams);
+    public function setRequestParameters(array $requestParams);
 
     /**
      * Returns the request parameters.
@@ -24,7 +24,7 @@ interface HttpClientInterface
      * @return array
      *   The request parameters.
      */
-    public function getRequestParams();
+    public function getRequestParameters();
 
     /**
      * Returns the request method.

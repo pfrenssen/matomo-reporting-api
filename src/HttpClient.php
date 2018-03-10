@@ -62,7 +62,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function setRequestParams(array $requestParams)
+    public function setRequestParameters(array $requestParams)
     {
         $this->requestParams = $requestParams;
 
@@ -72,7 +72,7 @@ class HttpClient implements HttpClientInterface
     /**
      * {@inheritdoc}
      */
-    public function getRequestParams()
+    public function getRequestParameters()
     {
         return $this->requestParams;
     }
@@ -134,7 +134,7 @@ class HttpClient implements HttpClientInterface
 
         $request = $this->requestFactory->getRequest($this->getMethod(), $this->getUrl());
         $param_type = $this->method === 'GET' ? 'query' : 'form_params';
-        $options = [$param_type => $this->getRequestParams()];
+        $options = [$param_type => $this->getRequestParameters()];
 
         return $this->httpClient->send($request, $options);
     }
