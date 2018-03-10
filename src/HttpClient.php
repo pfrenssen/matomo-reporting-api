@@ -134,10 +134,8 @@ class HttpClient implements HttpClientInterface
 
         $request = $this->requestFactory->getRequest($this->getMethod(), $this->getUrl());
         $param_type = $this->method === 'GET' ? 'query' : 'form_params';
+        $options = [$param_type => $this->getRequestParams()];
 
-        return $this->httpClient->send(
-            $request,
-            [$param_type => $this->getRequestParams()]
-        );
+        return $this->httpClient->send($request, $options);
     }
 }
