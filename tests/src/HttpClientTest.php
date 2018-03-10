@@ -3,12 +3,21 @@
 namespace Piwik\ReportingApi\tests;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Piwik\ReportingApi\HttpClient;
+use Piwik\ReportingApi\RequestFactoryInterface;
+use Prophecy\Argument;
+use Psr\Http\Message\RequestInterface;
 
+/**
+ * Tests for the HttpClient class.
+ *
+ * @coversDefaultClass \Piwik\ReportingApi\HttpClient
+ */
 class HttpClientTest extends TestCase
 {
 
@@ -29,7 +38,8 @@ class HttpClientTest extends TestCase
         $mock = new MockHandler([new Response(200, [], 'NA')]);
         $handler = HandlerStack::create($mock);
         $mockHttp = new Client(['handler' => $handler]);
-        $this->httpClient = new HttpClient($mockHttp);
+        $requestFactory = $this->prophesize(RequestFactoryInterface::class);
+        $this->httpClient = new HttpClient($mockHttp, $requestFactory->reveal());
     }
 
     /**
@@ -41,11 +51,6 @@ class HttpClientTest extends TestCase
         $params = ['foo' => 'bar'];
         $this->httpClient->setUrl($test_url);
         $this->assertEquals($test_url, $this->httpClient->getUrl());
-
-        $this->httpClient->setMethod('GET');
-        $this->assertEquals('GET', $this->httpClient->getMethod());
-        $this->httpClient->setMethod('POST');
-        $this->assertEquals('POST', $this->httpClient->getMethod());
 
         $this->httpClient->setRequestParams($params);
         $this->assertEquals($params, $this->httpClient->getRequestParams());
@@ -60,12 +65,36 @@ class HttpClientTest extends TestCase
      */
     public function testGetMethod($method)
     {
+        $http_client = $this->getHttpClient();
+
         // The GET method should be set by default.
-        $this->assertEquals('GET', $this->httpClient->getMethod());
+        $this->assertEquals('GET', $http_client->getMethod());
 
         // Check that the method that was set is returned correctly.
-        $this->httpClient->setMethod($method);
-        $this->assertEquals($method, $this->httpClient->getMethod());
+        $http_client->setMethod($method);
+        $this->assertEquals($method, $http_client->getMethod());
+    }
+
+    /**
+     * @param string $method
+     *   A supported HTTP method.
+     *
+     * @covers ::getMethod
+     * @dataProvider supportedHttpMethodsProvider
+     */
+    public function testSetMethod($method)
+    {
+        // It is expected that the given HTTP method will be passed to the request factory.
+        $request_factory = $this->prophesize(RequestFactoryInterface::class);
+        $request_factory
+            ->getRequest($method, Argument::any())
+            ->willReturn($this->prophesize(RequestInterface::class)->reveal())
+            ->shouldBeCalled();
+
+        $http_client = $this->getHttpClient(null, $request_factory->reveal());
+        $http_client->setUrl('http://example.com');
+        $http_client->setMethod($method);
+        $http_client->execute();
     }
 
     /**
@@ -80,7 +109,8 @@ class HttpClientTest extends TestCase
      */
     public function testUnsupportedHttpMethods($invalid_method)
     {
-        $this->httpClient->setMethod($invalid_method);
+        $http_client = $this->getHttpClient();
+        $http_client->setMethod($invalid_method);
     }
 
     /**
@@ -118,6 +148,8 @@ class HttpClientTest extends TestCase
             ['trace'],
             // Some arguments that are no HTTP methods.
             [null],
+            [true],
+            [false],
             [''],
             [0],
             [1],
@@ -131,18 +163,32 @@ class HttpClientTest extends TestCase
      */
     public function testExecute()
     {
+        $http_client = $this->getHttpClient();
         $this->expectException(\Exception::class);
-        $this->httpClient
+        $http_client
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
           ->execute();
 
-        $return = $this->httpClient
+        $return = $http_client
           ->setUrl('http://example.com')
           ->setRequestParams(['foo' => 'bar'])
           ->setMethod('GET')
           ->execute();
 
         $this->assertTrue($return instanceof Response);
+    }
+
+    /**
+     * Returns the SUT.
+     *
+     * @return \Piwik\ReportingApi\HttpClient
+     *   The class being tested.
+     */
+    protected function getHttpClient(ClientInterface $httpClient = null, RequestFactoryInterface $requestFactory = null)
+    {
+        $httpClient = $httpClient ?: $this->prophesize(ClientInterface::class)->reveal();
+        $requestFactory = $requestFactory ?: $this->prophesize(RequestFactoryInterface::class)->reveal();
+        return new HttpClient($httpClient, $requestFactory);
     }
 }

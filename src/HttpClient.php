@@ -2,8 +2,7 @@
 
 namespace Piwik\ReportingApi;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\ClientInterface;
 
 /**
  * A wrapper class that provides request options for the http client.
@@ -14,9 +13,16 @@ class HttpClient implements HttpClientInterface
     /**
      * The Guzzle HTTP client.
      *
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\ClientInterface
      */
     protected $httpClient;
+
+    /**
+     * The PSR7 request factory.
+     *
+     * @var \Piwik\ReportingApi\RequestFactoryInterface
+     */
+    protected $requestFactory;
 
     /**
      * The parameters to pass to the request.
@@ -42,12 +48,15 @@ class HttpClient implements HttpClientInterface
     /**
      * Constructs a new HttpClient object.
      *
-     * @param \GuzzleHttp\Client $httpClient
+     * @param \GuzzleHttp\ClientInterface $httpClient
      *   The Guzzle HTTP client.
+     * @param \Piwik\ReportingApi\RequestFactoryInterface $requestFactory
+     *   The PSR7 request factory.
      */
-    public function __construct(Client $httpClient)
+    public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory)
     {
         $this->httpClient = $httpClient;
+        $this->requestFactory = $requestFactory;
     }
 
     /**
@@ -122,7 +131,8 @@ class HttpClient implements HttpClientInterface
         if (empty($this->getUrl())) {
             throw new \Exception('Request url is not set.');
         }
-        $request = new Request($this->getMethod(), $this->getUrl());
+
+        $request = $this->requestFactory->getRequest($this->getMethod(), $this->getUrl());
         $param_type = $this->method === 'GET' ? 'query' : 'form_params';
 
         return $this->httpClient->send(
