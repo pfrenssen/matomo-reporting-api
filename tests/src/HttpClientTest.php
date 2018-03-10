@@ -47,13 +47,101 @@ class HttpClientTest extends TestCase
      */
     public function testArguments()
     {
-        $test_url = 'http://example.com';
         $params = ['foo' => 'bar'];
-        $this->httpClient->setUrl($test_url);
-        $this->assertEquals($test_url, $this->httpClient->getUrl());
-
         $this->httpClient->setRequestParams($params);
         $this->assertEquals($params, $this->httpClient->getRequestParams());
+    }
+
+    /**
+     * @param string $url
+     *   A valid URL.
+     *
+     * @covers ::getUrl
+     * @dataProvider urlProvider
+     */
+    public function testGetUrl($url)
+    {
+        $http_client = $this->getHttpClient();
+
+        // By default the URL is empty.
+        $this->assertEmpty($http_client->getUrl());
+
+        // Check that any URL that is set is correctly returned.
+        $http_client->setUrl($url);
+        $this->assertEquals($url, $http_client->getUrl());
+    }
+
+    /**
+     * @param string $url
+     *   A valid URL.
+     *
+     * @covers ::setUrl
+     * @dataProvider urlProvider
+     */
+    public function testSetUrl($url)
+    {
+        $http_client = $this->getHttpClient();
+
+        // Check that the object itself is returned for chaining.
+        $result = $http_client->setUrl($url);
+        $this->assertEquals($http_client, $result);
+
+        // Check that the URL has been correctly set.
+        $this->assertEquals($url, $http_client->getUrl());
+    }
+
+    /**
+     * @param string $invalid_url
+     *   An invalid URL.
+     *
+     * @expectedException \InvalidArgumentException
+     * @dataProvider invalidUrlProvider
+     */
+    public function testInvalidUrl($invalid_url)
+    {
+        $this->getHttpClient()->setUrl($invalid_url);
+    }
+
+    /**
+     * Data provider returning valid URLs.
+     */
+    public function urlProvider()
+    {
+        return [
+            ['http://example.com'],
+            ['http://exa-mple.com/pa-th/'],
+            ['https://archive.example.net/'],
+            ['https://archive.example.net./'],
+            ['http://127.0.0.1'],
+            ['http://[2001:0db8:0000:85a3:0000:0000:ac1f:8001]'],
+            ['ftp://a.b.com'],
+            ['http://localhost/'],
+            ['irc://user:password@localhost:8000/path'],
+            ['irc://:@localhost:'],
+        ];
+    }
+
+    /**
+     * Data provider returning invalid URLs.
+     */
+    public function invalidUrlProvider()
+    {
+        return [
+            ['http://exa_mple.com'],
+            ['archive.example.net'],
+            ['irc://:@:/path'],
+            ['http://..com'],
+            ['/'],
+            [null],
+            [true],
+            [false],
+            [''],
+            [[]],
+            [-1],
+            [0],
+            [1],
+            [2e-2],
+        ];
     }
 
     /**
@@ -93,8 +181,12 @@ class HttpClientTest extends TestCase
 
         $http_client = $this->getHttpClient(null, $request_factory->reveal());
         $http_client->setUrl('http://example.com');
-        $http_client->setMethod($method);
+        $result = $http_client->setMethod($method);
+        // Send the request so that we can check if the correct HTTP method is used.
         $http_client->execute();
+
+        // Check that the client is returned for chaining.
+        $this->assertEquals($http_client, $result);
     }
 
     /**
