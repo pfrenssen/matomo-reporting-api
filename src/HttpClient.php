@@ -5,7 +5,7 @@ namespace Piwik\ReportingApi;
 use GuzzleHttp\ClientInterface;
 
 /**
- * A wrapper class that provides request options for the http client.
+ * A wrapper class that provides request options for the HTTP client.
  */
 class HttpClient implements HttpClientInterface
 {

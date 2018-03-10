@@ -9,7 +9,7 @@ class Query implements QueryInterface
 {
 
     /**
-     * An http client that encapsulates a GuzzleHttp client.
+     * An HTTP client that encapsulates a GuzzleHttp client.
      *
      * @var \Piwik\ReportingApi\HttpClient
      */
