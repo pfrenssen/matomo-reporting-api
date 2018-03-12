@@ -9,6 +9,7 @@ use Piwik\ReportingApi\HttpClient;
 use Piwik\ReportingApi\RequestFactoryInterface;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Tests for the HttpClient class.
@@ -272,7 +273,8 @@ class HttpClientTest extends TestCase
      * @covers ::sendRequest
      * @expectedException \Exception
      */
-    public function testSendRequestWithoutUrl() {
+    public function testSendRequestWithoutUrl()
+    {
         $this->getHttpClient()
             ->setRequestParameters(['foo' => 'bar'])
             ->setMethod('GET')
@@ -281,19 +283,85 @@ class HttpClientTest extends TestCase
 
     /**
      * @covers ::sendRequest
+     * @dataProvider sendRequestProvider
      */
-    public function testExecute()
+    public function testSendRequest($method, $url, $parameters, $expected_options)
     {
-        $http_client = $this->getHttpClient();
+        // Mock the response that will be returned by the Guzzle HTTP client.
+        $response = $this->prophesize(Response::class);
 
-        $this->markTestSkipped();
-        $return = $http_client
-          ->setUrl('http://example.com')
-          ->setRequestParameters(['foo' => 'bar'])
-          ->setMethod('GET')
-          ->sendRequest();
+        // Mock the request that is expected to be returned by the request factory and will be passed to Guzzle.
+        $request = $this->prophesize(RequestInterface::class);
 
-        $this->assertTrue($return instanceof Response);
+        // It is expected that the request factory will be called with the correct method and URL.
+        $request_factory = $this->prophesize(RequestFactoryInterface::class);
+        $request_factory->getRequest($method, $url)
+            ->willReturn($request->reveal())
+            ->shouldBeCalled();
+
+        // It is expected that the send() method will be called on the Guzzle client with the request and the expected
+        // options array. This will return the response.
+        $client = $this->prophesize(ClientInterface::class);
+        $client->send($request, $expected_options)
+            ->willReturn($response->reveal())
+            ->shouldBeCalled();
+
+        $http_client = $this->getHttpClient($client->reveal(), $request_factory->reveal());
+        $http_client->setMethod($method);
+        $http_client->setUrl($url);
+        $http_client->setRequestParameters($parameters);
+
+        $response = $http_client->sendRequest();
+        $this->assertInstanceOf(ResponseInterface::class, $response);
+    }
+
+    /**
+     * Provides data for testing the sendRequest() method.
+     */
+    public function sendRequestProvider()
+    {
+        return [
+            [
+                // The HTTP method to use.
+                'GET',
+                // The URL to use.
+                'http://example.com',
+                // The request parameters to use.
+                [
+                    'format' => 'json',
+                    'module' => 'API',
+                    'method' => 'API.getPiwikVersion',
+                ],
+                // The expected options that should be passed to the Guzzle HTTP client.
+                [
+                    'query' => [
+                        'format' => 'json',
+                        'module' => 'API',
+                        'method' => 'API.getPiwikVersion',
+                    ],
+                ]
+            ],
+            [
+                // The HTTP method to use.
+                'POST',
+                // The URL to use.
+                'https://example.com',
+                // The request parameters to use.
+                [
+                    'format' => 'json',
+                    'module' => 'API',
+                    'method' => 'API.getPiwikVersion',
+                ],
+                // The expected options that should be passed to the Guzzle HTTP client.
+                [
+                    'form_params' => [
+                        'format' => 'json',
+                        'module' => 'API',
+                        'method' => 'API.getPiwikVersion',
+                    ],
+                ]
+            ],
+        ];
     }
 
     /**
