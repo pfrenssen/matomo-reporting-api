@@ -25,6 +25,13 @@ class QueryFactory implements QueryFactoryInterface
     protected $url;
 
     /**
+     * The HTTP client.
+     *
+     * @var \Piwik\ReportingApi\HttpClient
+     */
+    protected $httpClient;
+
+    /**
      * Constructs a new QueryFactory.
      *
      * @param string $url
@@ -35,7 +42,7 @@ class QueryFactory implements QueryFactoryInterface
     public function __construct($url, Client $httpClient)
     {
         $this->url = $url;
-        $this->httpClient = $httpClient;
+        $this->httpClient = new HttpClient($httpClient, new RequestFactory());
     }
 
     /**
@@ -96,5 +103,16 @@ class QueryFactory implements QueryFactoryInterface
         $query->setParameter('method', $method);
 
         return $query;
+    }
+
+    /**
+     * Returns the HTTP client wrapper.
+     *
+     * @return \Piwik\ReportingApi\HttpClient
+     *   The HTTP client wrapper.
+     */
+    public function getHttpClient()
+    {
+        return $this->httpClient;
     }
 }

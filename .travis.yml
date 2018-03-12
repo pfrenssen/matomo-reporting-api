@@ -9,6 +9,7 @@ sudo: false
 
 env:
   - TEST=PHP_CodeSniffer
+  - TEST=PHPUnit
 
 matrix:
   exclude:
