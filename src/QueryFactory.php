@@ -42,7 +42,7 @@ class QueryFactory implements QueryFactoryInterface
     public function __construct($url, Client $httpClient)
     {
         $this->url = $url;
-        $this->httpClient = new HttpClient($httpClient);
+        $this->httpClient = new HttpClient($httpClient, new RequestFactory());
     }
 
     /**
