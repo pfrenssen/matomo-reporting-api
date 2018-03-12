@@ -21,7 +21,7 @@ class HttpClientTest extends TestCase
     /**
      * @param array $parameters
      *
-     * @covers ::getRequestParams
+     * @covers ::getRequestParameters
      * @dataProvider requestParametersProvider
      */
     public function testGetRequestParameters(array $parameters)
@@ -39,7 +39,7 @@ class HttpClientTest extends TestCase
     /**
      * @param array $parameters
      *
-     * @covers ::setRequestParams
+     * @covers ::setRequestParameters
      * @dataProvider requestParametersProvider
      */
     public function testSetRequestParameters(array $parameters)
@@ -267,17 +267,26 @@ class HttpClientTest extends TestCase
     }
 
     /**
-     * Tests the execute method.
+     * Tests that an exception is thrown when sending a request without specifying a URL.
+     *
+     * @covers ::sendRequest
+     * @expectedException \Exception
+     */
+    public function testSendRequestWithoutUrl() {
+        $this->getHttpClient()
+            ->setRequestParameters(['foo' => 'bar'])
+            ->setMethod('GET')
+            ->sendRequest();
+    }
+
+    /**
+     * @covers ::sendRequest
      */
     public function testExecute()
     {
         $http_client = $this->getHttpClient();
-        $this->expectException(\Exception::class);
-        $http_client
-          ->setRequestParameters(['foo' => 'bar'])
-          ->setMethod('GET')
-          ->sendRequest();
 
+        $this->markTestSkipped();
         $return = $http_client
           ->setUrl('http://example.com')
           ->setRequestParameters(['foo' => 'bar'])
