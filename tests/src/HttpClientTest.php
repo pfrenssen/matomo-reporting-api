@@ -184,7 +184,7 @@ class HttpClientTest extends TestCase
      * @param string $method
      *   A supported HTTP method.
      *
-     * @covers ::getMethod
+     * @covers ::setMethod
      * @dataProvider supportedHttpMethodsProvider
      */
     public function testSetMethod($method)
