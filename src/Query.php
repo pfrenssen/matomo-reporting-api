@@ -1,19 +1,17 @@
 <?php
 
-namespace Piwik\ReportingApi;
-
-use GuzzleHttp\Client;
+namespace Matomo\ReportingApi;
 
 /**
- * Default implementation of a query for the Piwik reporting API.
+ * Default implementation of a query for the Matomo reporting API.
  */
 class Query implements QueryInterface
 {
 
     /**
-     * The Guzzle HTTP client.
+     * An HTTP client that encapsulates a GuzzleHttp client.
      *
-     * @var \GuzzleHttp\Client
+     * @var \Matomo\ReportingApi\HttpClient
      */
     protected $httpClient;
 
@@ -25,27 +23,17 @@ class Query implements QueryInterface
     protected $parameters;
 
     /**
-     * The URL of the Piwik server.
-     *
-     * @var string
-     */
-    protected $url;
-
-    /**
      * Constructs a new Query object.
      *
      * @param string $url
-     *   The URL of the Piwik server.
-     * @param \GuzzleHttp\Client $httpClient
-     *   The Guzzle HTTP client.
+     *   The URL of the Matomo server.
+     * @param \Matomo\ReportingApi\HttpClient $httpClient
+     *   The HTTP client wrapper.
      */
-    public function __construct($url, Client $httpClient)
+    public function __construct($url, HttpClient $httpClient)
     {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new \InvalidArgumentException('Invalid URL.');
-        }
-        $this->url = $url;
         $this->httpClient = $httpClient;
+        $this->httpClient->setUrl($url);
     }
 
     /**
@@ -107,7 +95,7 @@ class Query implements QueryInterface
     public function execute()
     {
         $this->prepareExecute();
-        $response = $this->httpClient->get($this->url, ['query' => $this->parameters]);
+        $response = $this->httpClient->setRequestParameters($this->parameters)->sendRequest();
         return new QueryResult($response);
     }
 }

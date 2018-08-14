@@ -1,9 +1,9 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 /**
- * Interface for classes that provide Piwik reporting API query objects.
+ * Interface for classes that provide Matomo reporting API query objects.
  */
 interface QueryFactoryInterface
 {
@@ -12,18 +12,18 @@ interface QueryFactoryInterface
      * Returns a new QueryFactory using default settings.
      *
      * @param string $url
-     *   The URL of the Piwik server.
+     *   The URL of the Matomo server.
      *
-     * @return \Piwik\ReportingApi\QueryFactoryInterface
+     * @return \Matomo\ReportingApi\QueryFactoryInterface
      *   The new QueryFactory object.
      */
     public static function create($url);
 
     /**
-     * Sets the URL of the Piwik server.
+     * Sets the URL of the Matomo server.
      *
      * @param string $url
-     *   The URL of the Piwik server.
+     *   The URL of the Matomo server.
      *
      * @return $this
      *   The updated query factory object.
@@ -63,14 +63,22 @@ interface QueryFactoryInterface
     public function remove($name);
 
     /**
-     * Returns a query object for the given Piwik API method.
+     * Returns a query object for the given Matomo API method.
      *
      * @param string $method
      *   The name of the method for which to return a query object, in the format
      *   'ModuleName.methodName'.
      *
-     * @return \Piwik\ReportingApi\Query
+     * @return \Matomo\ReportingApi\Query
      *   The query object.
      */
     public function getQuery($method);
+
+    /**
+     * Returns the HTTP client wrapper.
+     *
+     * @return \Matomo\ReportingApi\HttpClient
+     *   The HTTP client wrapper.
+     */
+    public function getHttpClient();
 }

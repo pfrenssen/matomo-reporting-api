@@ -1,0 +1,26 @@
+language: php
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+
+sudo: false
+
+env:
+  - TEST=PHP_CodeSniffer
+  - TEST=PHPUnit
+
+matrix:
+  exclude:
+    - php: 5.6
+      env: TEST=PHP_CodeSniffer
+    - php: 7.0
+      env: TEST=PHP_CodeSniffer
+    - php: 7.1
+      env: TEST=PHP_CodeSniffer
+
+install:
+  - composer install
+
+script: ./scripts/travis-ci/run-test.sh ${TEST}

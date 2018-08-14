@@ -1,9 +1,9 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 /**
- * Interface for classes that query the Piwik reporting API.
+ * Interface for classes that query the Matomo reporting API.
  */
 interface QueryInterface
 {
@@ -57,7 +57,7 @@ interface QueryInterface
     /**
      * Executes the query.
      *
-     * @return \Piwik\ReportingApi\QueryResult
+     * @return \Matomo\ReportingApi\QueryResult
      *   The query result.
      */
     public function execute();
