@@ -1,6 +1,6 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 use GuzzleHttp\ClientInterface;
 
@@ -20,7 +20,7 @@ class HttpClient implements HttpClientInterface
     /**
      * The PSR7 request factory.
      *
-     * @var \Piwik\ReportingApi\RequestFactoryInterface
+     * @var \Matomo\ReportingApi\RequestFactoryInterface
      */
     protected $requestFactory;
 
@@ -50,7 +50,7 @@ class HttpClient implements HttpClientInterface
      *
      * @param \GuzzleHttp\ClientInterface $httpClient
      *   The Guzzle HTTP client.
-     * @param \Piwik\ReportingApi\RequestFactoryInterface $requestFactory
+     * @param \Matomo\ReportingApi\RequestFactoryInterface $requestFactory
      *   The PSR7 request factory.
      */
     public function __construct(ClientInterface $httpClient, RequestFactoryInterface $requestFactory)

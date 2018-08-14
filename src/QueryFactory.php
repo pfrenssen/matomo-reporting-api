@@ -1,11 +1,11 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 use GuzzleHttp\Client;
 
 /**
- * Factory for easy instantiation of Piwik reporting API query objects.
+ * Factory for easy instantiation of Matomo reporting API query objects.
  */
 class QueryFactory implements QueryFactoryInterface
 {
@@ -18,7 +18,7 @@ class QueryFactory implements QueryFactoryInterface
     protected $defaultParameters;
 
     /**
-     * The URL of the Piwik server.
+     * The URL of the Matomo server.
      *
      * @var string
      */
@@ -27,7 +27,7 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * The HTTP client.
      *
-     * @var \Piwik\ReportingApi\HttpClient
+     * @var \Matomo\ReportingApi\HttpClient
      */
     protected $httpClient;
 
@@ -35,7 +35,7 @@ class QueryFactory implements QueryFactoryInterface
      * Constructs a new QueryFactory.
      *
      * @param string $url
-     *   The URL of the Piwik server.
+     *   The URL of the Matomo server.
      * @param \GuzzleHttp\Client $httpClient
      *   The Guzzle HTTP client.
      */
@@ -108,7 +108,7 @@ class QueryFactory implements QueryFactoryInterface
     /**
      * Returns the HTTP client wrapper.
      *
-     * @return \Piwik\ReportingApi\HttpClient
+     * @return \Matomo\ReportingApi\HttpClient
      *   The HTTP client wrapper.
      */
     public function getHttpClient()

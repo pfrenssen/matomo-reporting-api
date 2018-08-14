@@ -1,6 +1,6 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 use GuzzleHttp\Psr7\Request;
 

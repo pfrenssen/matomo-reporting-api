@@ -1,6 +1,6 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 /**
  * Interface for objects that wrap an HTTP client.
@@ -13,7 +13,7 @@ interface HttpClientInterface
      * @param array $requestParams
      *   The request parameters array.
      *
-     * @return \Piwik\ReportingApi\HttpClient
+     * @return \Matomo\ReportingApi\HttpClient
      *   The object itself for chain calls.
      */
     public function setRequestParameters(array $requestParams);
@@ -40,7 +40,7 @@ interface HttpClientInterface
      * @param string $method
      *   The request method.
      *
-     * @return \Piwik\ReportingApi\HttpClient
+     * @return \Matomo\ReportingApi\HttpClient
      *   The object itself for chain calls.
      *
      * @throws \InvalidArgumentException
@@ -62,7 +62,7 @@ interface HttpClientInterface
      * @param string $url
      *   The url of the request.
      *
-     * @return \Piwik\ReportingApi\HttpClient
+     * @return \Matomo\ReportingApi\HttpClient
      *   The object itself for chain calls.
      *
      * @throws \InvalidArgumentException

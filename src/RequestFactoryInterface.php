@@ -1,6 +1,6 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;

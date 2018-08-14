@@ -1,16 +1,20 @@
 {
-    "name": "pfrenssen/piwik-reporting-api",
-    "description": "PHP client library to query the Piwik Reporting API.",
+    "name": "pfrenssen/matomo-reporting-api",
+    "description": "PHP client library to query the Matomo Reporting API.",
     "type": "library",
     "license": "GPL-3.0",
     "authors": [
         {
             "name": "Pieter Frenssen",
             "email": "pieter@frenssen.be"
+        },
+        {
+            "name": "Claudiu Cristea",
+            "email": "clau.cristea@gmail.com"
         }
     ],
     "autoload": {
-        "psr-4": {"Piwik\\ReportingApi\\": "src/"}
+        "psr-4": {"Matomo\\ReportingApi\\": "src/"}
     },
     "require": {
         "guzzlehttp/guzzle": "~6.0"

@@ -1,11 +1,11 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Contains the result of a query to the Piwik Reporting API.
+ * Contains the result of a query to the Matomo Reporting API.
  */
 class QueryResult
 {
@@ -28,7 +28,7 @@ class QueryResult
      * Constructs a QueryResult object.
      *
      * @param \GuzzleHttp\Psr7\Response $response
-     *   The HTTP response from the Piwik server that contains the query result.
+     *   The HTTP response from the Matomo server that contains the query result.
      */
     public function __construct(Response $response)
     {
@@ -36,7 +36,7 @@ class QueryResult
     }
 
     /**
-     * Returns the decoded response that was returned by the Piwik server.
+     * Returns the decoded response that was returned by the Matomo server.
      *
      * @return mixed
      *   The response. Can be an object, or an array of objects in case multiple
@@ -74,10 +74,10 @@ class QueryResult
         if ($this->getRawResponse()->getStatusCode() != 200) {
             return true;
         }
-        // If an error occurs the Piwik server still returns a 200 OK response,
+        // If an error occurs the Matomo server still returns a 200 OK response,
         // but the body of the response will contain the string "error" in the
         // "result" parameter.
-        // @see https://github.com/piwik/piwik/issues/7293
+        // @see https://github.com/matomo/matomo/issues/7293
         return $this->isObject() && $this->parameterExists('result') && $this->get('result') === 'error';
     }
 
@@ -166,7 +166,7 @@ class QueryResult
      *   The number of results.
      *
      * @throws \DomainException
-     *   Thrown when the response that was returned by Piwik was not an array.
+     *   Thrown when the response that was returned by Matomo was not an array.
      */
     public function getResultCount()
     {

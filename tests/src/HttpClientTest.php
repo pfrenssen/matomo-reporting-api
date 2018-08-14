@@ -1,12 +1,12 @@
 <?php
 
-namespace Piwik\ReportingApi\tests;
+namespace Matomo\ReportingApi\tests;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Piwik\ReportingApi\HttpClient;
-use Piwik\ReportingApi\RequestFactoryInterface;
+use Matomo\ReportingApi\HttpClient;
+use Matomo\ReportingApi\RequestFactoryInterface;
 use Prophecy\Argument;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Tests for the HttpClient class.
  *
- * @coversDefaultClass \Piwik\ReportingApi\HttpClient
+ * @coversDefaultClass \Matomo\ReportingApi\HttpClient
  */
 class HttpClientTest extends TestCase
 {
@@ -329,14 +329,14 @@ class HttpClientTest extends TestCase
                 [
                     'format' => 'json',
                     'module' => 'API',
-                    'method' => 'API.getPiwikVersion',
+                    'method' => 'API.getMatomoVersion',
                 ],
                 // The expected options that should be passed to the Guzzle HTTP client.
                 [
                     'query' => [
                         'format' => 'json',
                         'module' => 'API',
-                        'method' => 'API.getPiwikVersion',
+                        'method' => 'API.getMatomoVersion',
                     ],
                 ]
             ],
@@ -349,14 +349,14 @@ class HttpClientTest extends TestCase
                 [
                     'format' => 'json',
                     'module' => 'API',
-                    'method' => 'API.getPiwikVersion',
+                    'method' => 'API.getMatomoVersion',
                 ],
                 // The expected options that should be passed to the Guzzle HTTP client.
                 [
                     'form_params' => [
                         'format' => 'json',
                         'module' => 'API',
-                        'method' => 'API.getPiwikVersion',
+                        'method' => 'API.getMatomoVersion',
                     ],
                 ]
             ],
@@ -366,7 +366,7 @@ class HttpClientTest extends TestCase
     /**
      * Returns the SUT.
      *
-     * @return \Piwik\ReportingApi\HttpClient
+     * @return \Matomo\ReportingApi\HttpClient
      *   The class being tested.
      */
     protected function getHttpClient(ClientInterface $httpClient = null, RequestFactoryInterface $requestFactory = null)

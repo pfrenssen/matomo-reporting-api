@@ -1,9 +1,9 @@
 <?php
 
-namespace Piwik\ReportingApi;
+namespace Matomo\ReportingApi;
 
 /**
- * Default implementation of a query for the Piwik reporting API.
+ * Default implementation of a query for the Matomo reporting API.
  */
 class Query implements QueryInterface
 {
@@ -11,7 +11,7 @@ class Query implements QueryInterface
     /**
      * An HTTP client that encapsulates a GuzzleHttp client.
      *
-     * @var \Piwik\ReportingApi\HttpClient
+     * @var \Matomo\ReportingApi\HttpClient
      */
     protected $httpClient;
 
@@ -26,8 +26,8 @@ class Query implements QueryInterface
      * Constructs a new Query object.
      *
      * @param string $url
-     *   The URL of the Piwik server.
-     * @param \Piwik\ReportingApi\HttpClient $httpClient
+     *   The URL of the Matomo server.
+     * @param \Matomo\ReportingApi\HttpClient $httpClient
      *   The HTTP client wrapper.
      */
     public function __construct($url, HttpClient $httpClient)
