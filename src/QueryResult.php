@@ -78,7 +78,7 @@ class QueryResult
         // but the body of the response will contain the string "error" in the
         // "result" parameter.
         // @see https://github.com/matomo/matomo/issues/7293
-        return $this->isObject() && $this->parameterExists('result') && $this->get('result') === 'error';
+        return !$this->isObject() || $this->parameterExists('result') && $this->get('result') === 'error';
     }
 
     /**
