@@ -7,12 +7,10 @@
         {
             "name": "Pieter Frenssen",
             "email": "pieter@frenssen.be"
-        },
-        {
-            "name": "Claudiu Cristea",
-            "email": "clau.cristea@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,    
     "autoload": {
         "psr-4": {"Matomo\\ReportingApi\\": "src/"}
     },
