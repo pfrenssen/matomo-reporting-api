@@ -2,22 +2,27 @@
 
 namespace Matomo\ReportingApi\tests;
 
+use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 use Matomo\ReportingApi\HttpClient;
 use Matomo\ReportingApi\RequestFactoryInterface;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+
 
 /**
  * Tests for the HttpClient class.
  *
  * @coversDefaultClass \Matomo\ReportingApi\HttpClient
  */
-class HttpClientTest extends TestCase
-{
+class HttpClientTest extends TestCase {
+
+    use ProphecyTrait;
+
 
     /**
      * @param array $parameters
@@ -37,6 +42,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($parameters, $http_client->getRequestParameters());
     }
 
+
     /**
      * @param array $parameters
      *
@@ -55,6 +61,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($parameters, $http_client->getRequestParameters());
     }
 
+
     /**
      * Data provider returning request parameters.
      */
@@ -68,6 +75,7 @@ class HttpClientTest extends TestCase
             [['foo' => 'bar', 'baz' => 'qux']],
         ];
     }
+
 
     /**
      * @param string $url
@@ -88,6 +96,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($url, $http_client->getUrl());
     }
 
+
     /**
      * @param string $url
      *   A valid URL.
@@ -107,17 +116,20 @@ class HttpClientTest extends TestCase
         $this->assertEquals($url, $http_client->getUrl());
     }
 
+
     /**
      * @param string $invalid_url
      *   An invalid URL.
      *
-     * @expectedException \InvalidArgumentException
+     *
      * @dataProvider invalidUrlProvider
      */
     public function testInvalidUrl($invalid_url)
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->getHttpClient()->setUrl($invalid_url);
     }
+
 
     /**
      * Data provider returning valid URLs.
@@ -136,6 +148,7 @@ class HttpClientTest extends TestCase
             ['irc://:@localhost:'],
         ];
     }
+
 
     /**
      * Data provider returning invalid URLs.
@@ -160,6 +173,7 @@ class HttpClientTest extends TestCase
         ];
     }
 
+
     /**
      * @param string $method
      *   A supported HTTP method.
@@ -179,6 +193,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($method, $http_client->getMethod());
     }
 
+
     /**
      * @param string $method
      *   A supported HTTP method.
@@ -188,22 +203,13 @@ class HttpClientTest extends TestCase
      */
     public function testSetMethod($method)
     {
-        // It is expected that the given HTTP method will be passed to the request factory.
-        $request_factory = $this->prophesize(RequestFactoryInterface::class);
-        $request_factory
-            ->getRequest($method, Argument::any())
-            ->willReturn($this->prophesize(RequestInterface::class)->reveal())
-            ->shouldBeCalled();
+        $http_client = $this->getHttpClient();
+        $http_client->setMethod($method);
 
-        $http_client = $this->getHttpClient(null, $request_factory->reveal());
-        $http_client->setUrl('http://example.com');
-        $result = $http_client->setMethod($method);
-        // Send the request so that we can check if the correct HTTP method is used.
-        $http_client->sendRequest();
-
-        // Check that the client is returned for chaining.
-        $this->assertEquals($http_client, $result);
+        // Check if correct HTTP method is returned by client
+        $this->assertEquals($http_client->getMethod(), $method);
     }
+
 
     /**
      * Tests that an exception is thrown for unsupported HTTP methods.
@@ -212,14 +218,17 @@ class HttpClientTest extends TestCase
      *   An unsupported or invalid HTTP method.
      *
      * @covers ::setMethod
-     * @expectedException \InvalidArgumentException
+     *
      * @dataProvider unsupportedHttpMethodsProvider
      */
     public function testUnsupportedHttpMethods($invalid_method)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $http_client = $this->getHttpClient();
         $http_client->setMethod($invalid_method);
     }
+
 
     /**
      * Data provider returning supported HTTP methods.
@@ -231,6 +240,7 @@ class HttpClientTest extends TestCase
             ['POST'],
         ];
     }
+
 
     /**
      * Data provider returning unsupported and invalid HTTP methods.
@@ -266,19 +276,23 @@ class HttpClientTest extends TestCase
         ];
     }
 
+
     /**
      * Tests that an exception is thrown when sending a request without specifying a URL.
      *
      * @covers ::sendRequest
-     * @expectedException \Exception
+     *
      */
     public function testSendRequestWithoutUrl()
     {
+        $this->expectException(Exception::class);
+
         $this->getHttpClient()
             ->setRequestParameters(['foo' => 'bar'])
             ->setMethod('GET')
             ->sendRequest();
     }
+
 
     /**
      * @covers ::sendRequest
@@ -314,6 +328,7 @@ class HttpClientTest extends TestCase
         $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 
+
     /**
      * Provides data for testing the sendRequest() method.
      */
@@ -338,7 +353,7 @@ class HttpClientTest extends TestCase
                         'module' => 'API',
                         'method' => 'API.getMatomoVersion',
                     ],
-                ]
+                ],
             ],
             [
                 // The HTTP method to use.
@@ -358,10 +373,11 @@ class HttpClientTest extends TestCase
                         'module' => 'API',
                         'method' => 'API.getMatomoVersion',
                     ],
-                ]
+                ],
             ],
         ];
     }
+
 
     /**
      * Returns the SUT.
@@ -373,6 +389,8 @@ class HttpClientTest extends TestCase
     {
         $httpClient = $httpClient ?: $this->prophesize(ClientInterface::class)->reveal();
         $requestFactory = $requestFactory ?: $this->prophesize(RequestFactoryInterface::class)->reveal();
+
         return new HttpClient($httpClient, $requestFactory);
     }
+
 }
